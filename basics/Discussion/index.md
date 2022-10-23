@@ -1,5 +1,11 @@
 # Discussion
 
+- [Discussion](#discussion)
+  - [Topics](#topics)
+  - [Basics](#basics)
+  - [Objective-C classes](#objective-c-classes)
+  - [Data Structures](#data-structures)
+
 ## Topics
 
 - Basics (data types, conditions, loops, functions, define, enum)

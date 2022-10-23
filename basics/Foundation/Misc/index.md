@@ -2,7 +2,7 @@
 
 
 Make data turn into string
-```
+```objc
 
 - (NSString *)stringify: (id)data withPlaceholder:(NSString *)placeholder {
     
@@ -17,7 +17,7 @@ Make data turn into string
 
 
 NSObject+Stringify.h
-```
+```objc
 @interface NSObject (Stringify)
 
 @end
