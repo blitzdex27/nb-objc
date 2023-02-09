@@ -23,8 +23,20 @@
     - [Make task asynchronous using `NSOperation`](#make-task-asynchronous-using-nsoperation)
       - [Add operation using block](#add-operation-using-block)
       - [Add operation using NSInvocation](#add-operation-using-nsinvocation)
-    - [add operation using NSBlockOperation](#add-operation-using-nsblockoperation)
-
+    - [Add operation using NSBlockOperation](#add-operation-using-nsblockoperation)
+    - [Add operation using NSOperation](#add-operation-using-nsoperation)
+  - [NSPredicate](#nspredicate)
+    - [Check if string conforms with the pattern](#check-if-string-conforms-with-the-pattern)
+    - [Filter array with predicate method 1](#filter-array-with-predicate-method-1)
+    - [Filter array with predicate method 2](#filter-array-with-predicate-method-2)
+  - [NSRegularExpression](#nsregularexpression)
+    - [Check if string is valid](#check-if-string-is-valid)
+    - [See matched substring with pattern](#see-matched-substring-with-pattern)
+  - [How to make your own PLIST](#how-to-make-your-own-plist)
+    - [Accessing PLIST key and values](#accessing-plist-key-and-values)
+    - [Accessing plist with validation if file exists](#accessing-plist-with-validation-if-file-exists)
+    - [Accessing plist with singleton pattern](#accessing-plist-with-singleton-pattern)
+  - [How to get components of UIColor](#how-to-get-components-of-uicolor)
 
 ## Convert JSON to NSDictionary
 
@@ -79,7 +91,6 @@ NSData *JSONData = [NSData dataWithContentsOfURL:internetPath options:NSDataRead
 ```
 
 ## Fetching from RESTful API
-
 
 ### Get request
 
@@ -165,7 +176,7 @@ NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completion
         NSString *requestReply = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         NSLog(@"requestReply: %@", requestReply);
     }
-    
+
 /* start request session */
 [dataTask resume];
 
@@ -405,5 +416,234 @@ NSOperationQueue *q = [[NSOperationQueue alloc] init];
 
 ```
 
-### add operation using NSBlockOperation
+### Add operation using NSBlockOperation
 
+```objc
+
+/* version 1 - simple */
+NSBlockOperation * fetchOperation = [NSBlockOperation blockOperationWithBlock:^{
+    /* code to execute in background */
+}];
+
+/* version 2 - adding more blocks */
+NSBlockOperation * fetchOperation = [NSBlockOperation blockOperationWithBlock:^{
+    /* code to execute in background */
+}];
+
+[fetchOperation addExecutionBlock:^{
+    /* add this block to operation */
+}];
+
+NSOperationQueue * queue = [[NSOperationQueue alloc] init];
+queue.name = @"fetch";
+[queue addOperation:fetchOperation];
+
+
+```
+
+### Add operation using NSOperation
+
+...to be created
+
+## NSPredicate
+
+### Check if string conforms with the pattern
+
+```objc
+
+NSString *string = @"world_cup39@3x.png";
+NSString *pattern = @"[a-z]+[_a-z0-9]*@3x\\.png";
+
+NSPredicate * predicate = [NSPredicate predicateWithFormat:@"SELF matches %@", pattern];
+
+BOOL isValid = [predicate evaluateWithObject:string];
+
+NSLog(@"is valid: %d", isValid);
+
+```
+
+### Filter array with predicate method 1
+
+```objc
+
+NSArray * trainees = @[
+    @{@"name": @"dekideks", @"team": @"iOS"},
+    @{@"name": @"sanji", @"team": @"iOS"},
+    @{@"name": @"shinmon", @"team", @"iOS"},
+    @{@"name": @"omen", @"team": @"iOS"},
+    @{@"name": @"teteng", @"team": @"iOS"},
+    @{@"name": @"vanilla", @"team": @"iOS"},
+];
+
+NSString * searchString = @"e";
+
+NSPredicate * predicate2 = [NSPredicate predicateWithFormat:@"name contains[c] %@", searchString];
+
+NSLog(@"%@", [trainees filteredArrayUsingPredicate:predicate2]);
+
+```
+
+### Filter array with predicate method 2
+
+```objc
+
+NSArray * trainees = @[
+    @{@"name": @"dekideks", @"team": @"iOS"},
+    @{@"name": @"sanji", @"team": @"iOS"},
+    @{@"name": @"shinmon", @"team": @"iOS"},
+    @{@"name": @"omen", @"team": @"iOS"},
+    @{@"name": @"teteng", @"team": @"iOS"},
+    @{@"name": @"vanilla", @"team": @"iOS"},
+];
+
+NSString * searchString = @"e";
+
+NSPredicate * predicate = [NSPredicate predicateWithBlock:^BOOL(id _Nullable evaluatedObject, NSDictionary<NSString *, id> * _Nullable bindings) {
+
+    if ([searchString isEqualToString:[evaluatedObject objectForKey:@"name"]] || [[evaluatedObject objectForKey:@"name"] rangeOfString:searchString].location != NSNotFound) {
+        return evaluatedObject;
+    }
+
+    return nil;
+}];
+
+NSLog(@"%@", [trainees filteredArrayUsingPredicate:predicate]);
+
+```
+
+## NSRegularExpression
+
+### Check if string is valid
+
+```objc
+
+NSString *string = @"48";
+NSString *pattern = @"^\\d{2}$";
+
+NSError *error;
+NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
+
+/* check if valid */
+NSInteger numberOfMatches = [regex numberOfMatchesInString:string options:0 range:NSMakeRange(0, string.length)];
+
+BOOL isValid = NO;
+
+if (numberOfMatches > 0) isValid = YES;
+
+NSLog(@"is valid: %d", isValid);
+
+```
+
+### See matched substring with pattern
+
+```objc
+
+NSString *string = @"48 59 28";
+
+NSString *pattern = @"\\d{2}";
+
+NSError *error;
+NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
+NSArray<NSTextCheckingResult *> *matches = [regex matchesInString:string options:0 range:NSMakeRange(0, string.length)];
+
+NSMutableArray<NSString *> *matchedStrings = [[NSMutableArray alloc] init];
+
+for (NSTextCheckingResult *result in matches) {
+    NSString * matchedString = [string substringWithRange:[results range]];
+
+    [matchedStrings addObject:matchedString];
+}
+
+NSLog(@"matches: %@", matchedString);
+
+```
+
+## How to make your own PLIST
+
+1. Right-click the folder where you want to add a plist
+2. Choose New File
+3. Choose iOS > Resource > Property List
+4. Set the name you want
+5. Go to the newly created file
+6. Add key and value as you desired
+
+### Accessing PLIST key and values
+
+```objc
+
+/* sample: plist file name is metadeks.plist */
+
+NSString *filePath = [[NSBundle mainBundle] pathForResource:@"metadeks" ofType:@"plist"];
+NSDictionary *contents = [NSDictionary dictionaryWithContentsOfFile:filePath];
+
+NSLog(@"%@", contents);
+
+```
+
+### Accessing plist with validation if file exists
+
+```objc
+
+NSString *filePath = [[NSBundle mainBundle] pathForResource:@"metadeks" ofType:@"plist"];
+
+NSDictionary *contents = nil;
+
+/* check if file exist first */
+NSFileManager *fm = [NSFileManager defaultManager];
+
+if ([fm fileExistsAthPath:filePath]) {
+    contents = [NSDictionary dictionaryWithContentsOfFile:filePath];
+}
+
+NSLog(@"%@", contents);
+
+```
+
+### Accessing plist with singleton pattern
+
+```objc
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    NSDictionary *metadata = [self metadata];
+    NSLog(@"%@", metadata);
+}
+
+
+- (NSDictionary *)metadata {
+    static NSDictionary * metadata = nil;
+    static dispatch_once_t onceToken;
+
+    dispatch_once(&onceToken, ^{
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"metadeks" ofType:@"plist"];
+        NSFileManager *fm = [NSFileManager defaultManager];
+
+        if ([fm fileExistsAtPath:filePath]) {
+            metadata = [NSDictionary dictionaryWithContentsOfFile:filePath];
+        }
+    });
+    return metadata;
+}
+
+```
+
+## How to get components of UIColor
+
+```objc
+
+UIColor *steelBlueColor = [UIColor colorWithRed:0.3f green:0.4f blue:0.6f alpha:1.0f];
+
+/* get components */
+
+CGColorRef colorRef = steelBlueColor.CGColor;
+
+const CGFloat *components = CGColorGetComponents(colorRef);
+
+NSUinteger componentsCount = CGColorGetNumberOfComponents(colorRef);
+
+for (NSUInteger counter = 0; counter < componentsCount; counter++) {
+    NSLog(@"Component %lu = %.02f", counter, components[counter]);
+}
+
+```
