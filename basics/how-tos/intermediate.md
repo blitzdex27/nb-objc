@@ -1,37 +1,32 @@
 # Intermediate Objective C
 
-<!-- vscode-markdown-toc -->
-* [Convert JSON to NSDictionary](#ConvertJSONtoNSDictionary)
-* [Convert JSON data into NSData](#ConvertJSONdataintoNSData)
-	* [From local JSON file](#FromlocalJSONfile)
-	* [From URL](#FromURL)
-* [Fetching from RESTful API](#FetchingfromRESTfulAPI)
-	* [Get request](#Getrequest)
-	* [Post request](#Postrequest)
-* [Block syntax in objective-c](#Blocksyntaxinobjective-c)
-	* [Syntax](#Syntax)
-	* [No return, no parameter](#Noreturnnoparameter)
-	* [With return, no parameter](#Withreturnnoparameter)
-	* [With arguments](#Witharguments)
-	* [block as C function parameter](#blockasCfunctionparameter)
-	* [OOP - Block as return value](#OOP-Blockasreturnvalue)
-	* [OOP - Block as argument](#OOP-Blockasargument)
-* [Concurrency](#Concurrency)
-	* [Make task asynchronous using GCD - `dispatch`](#MaketaskasynchronoususingGCD-dispatch)
-		* [Dispatch asynchronously on another thread](#Dispatchasynchronouslyonanotherthread)
-		* [Dispatch asynchronously on main thread](#Dispatchasynchronouslyonmainthread)
-	* [Make task asynchronous using `NSOperation`](#MaketaskasynchronoususingNSOperation)
-		* [Add operation using block](#Addoperationusingblock)
-		* [Add operation using NSInvocation](#AddoperationusingNSInvocation)
-
-<!-- vscode-markdown-toc-config
-	numbering=false
-	autoSave=true
-	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc -->
+- [Intermediate Objective C](#intermediate-objective-c)
+  - [Convert JSON to NSDictionary](#convert-json-to-nsdictionary)
+  - [Convert JSON data into NSData](#convert-json-data-into-nsdata)
+    - [From local JSON file](#from-local-json-file)
+    - [From URL](#from-url)
+  - [Fetching from RESTful API](#fetching-from-restful-api)
+    - [Get request](#get-request)
+    - [Post request](#post-request)
+  - [Block syntax in objective-c](#block-syntax-in-objective-c)
+    - [Syntax](#syntax)
+    - [No return, no parameter](#no-return-no-parameter)
+    - [With return, no parameter](#with-return-no-parameter)
+    - [With arguments](#with-arguments)
+    - [block as C function parameter](#block-as-c-function-parameter)
+    - [OOP - Block as return value](#oop---block-as-return-value)
+    - [OOP - Block as argument](#oop---block-as-argument)
+  - [Concurrency](#concurrency)
+    - [Make task asynchronous using GCD - `dispatch`](#make-task-asynchronous-using-gcd---dispatch)
+      - [Dispatch asynchronously on another thread](#dispatch-asynchronously-on-another-thread)
+      - [Dispatch asynchronously on main thread](#dispatch-asynchronously-on-main-thread)
+    - [Make task asynchronous using `NSOperation`](#make-task-asynchronous-using-nsoperation)
+      - [Add operation using block](#add-operation-using-block)
+      - [Add operation using NSInvocation](#add-operation-using-nsinvocation)
+    - [add operation using NSBlockOperation](#add-operation-using-nsblockoperation)
 
 
-## <a name='ConvertJSONtoNSDictionary'></a>Convert JSON to NSDictionary
+## Convert JSON to NSDictionary
 
 ```objc
 
@@ -55,9 +50,9 @@ NSDictionary *myJSON = (NSDictionary *)JSONObject;
 
 ```
 
-## <a name='ConvertJSONdataintoNSData'></a>Convert JSON data into NSData
+## Convert JSON data into NSData
 
-### <a name='FromlocalJSONfile'></a>From local JSON file
+### From local JSON file
 
 ```objc
 
@@ -70,7 +65,7 @@ NSData *JSONData = [NSData dataWithContentsOfFile:filePath options:NSDataReading
 
 ```
 
-### <a name='FromURL'></a>From URL
+### From URL
 
 ```objc
 
@@ -83,10 +78,10 @@ NSData *JSONData = [NSData dataWithContentsOfURL:internetPath options:NSDataRead
 
 ```
 
-## <a name='FetchingfromRESTfulAPI'></a>Fetching from RESTful API
+## Fetching from RESTful API
 
 
-### <a name='Getrequest'></a>Get request
+### Get request
 
 ```objc
 
@@ -115,7 +110,7 @@ NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:urlRequest complet
 
 ```
 
-### <a name='Postrequest'></a>Post request
+### Post request
 
 ```objc
 
@@ -179,16 +174,16 @@ NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completion
 
 ```
 
-## <a name='Blocksyntaxinobjective-c'></a>Block syntax in objective-c
+## Block syntax in objective-c
 
-### <a name='Syntax'></a>Syntax
+### Syntax
 
-```
+```objc
 ReturnType (^blockName)(parameterTypes) = ^ ReturnType(parameterTypes and parameterNames) {};
 
 ```
 
-### <a name='Noreturnnoparameter'></a>No return, no parameter
+### No return, no parameter
 
 ```objc
 
@@ -200,7 +195,7 @@ myBlock();
 
 ```
 
-### <a name='Withreturnnoparameter'></a>With return, no parameter
+### With return, no parameter
 
 ```objc
 
@@ -213,7 +208,7 @@ NSLog(@"myBlock value: %i", myBlock());
 
 ```
 
-### <a name='Witharguments'></a>With arguments
+### With arguments
 
 ```objc
 
@@ -225,7 +220,7 @@ myBlock(1, 2);
 
 ```
 
-### <a name='blockasCfunctionparameter'></a>block as C function parameter
+### block as C function parameter
 
 ```objc
 
@@ -289,7 +284,7 @@ int main (int argc, const char *argv[]) {
 
 ```
 
-### <a name='OOP-Blockasreturnvalue'></a>OOP - Block as return value
+### OOP - Block as return value
 
 ```objc
 /* no return, no parameter block */
@@ -314,7 +309,7 @@ int main (int argc, const char *argv[]) {
 
 ```
 
-### <a name='OOP-Blockasargument'></a>OOP - Block as argument
+### OOP - Block as argument
 
 ```objc
 
@@ -329,11 +324,11 @@ int main (int argc, const char *argv[]) {
 
 ```
 
-## <a name='Concurrency'></a>Concurrency
+## Concurrency
 
-### <a name='MaketaskasynchronoususingGCD-dispatch'></a>Make task asynchronous using GCD - `dispatch`
+### Make task asynchronous using GCD - `dispatch`
 
-#### <a name='Dispatchasynchronouslyonanotherthread'></a>Dispatch asynchronously on another thread
+#### Dispatch asynchronously on another thread
 
 ```objc
 
@@ -348,7 +343,7 @@ dispatch_async(queue, ^ {
 
 ```
 
-#### <a name='Dispatchasynchronouslyonmainthread'></a>Dispatch asynchronously on main thread
+#### Dispatch asynchronously on main thread
 
 ```objc
 
@@ -362,9 +357,9 @@ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(
 
 ```
 
-### <a name='MaketaskasynchronoususingNSOperation'></a>Make task asynchronous using `NSOperation`
+### Make task asynchronous using `NSOperation`
 
-#### <a name='Addoperationusingblock'></a>Add operation using block
+#### Add operation using block
 
 ```objc
 
@@ -379,7 +374,7 @@ NSOperationQueue *q = [[NSOperationQueue alloc] init];
 
 ```
 
-#### <a name='AddoperationusingNSInvocation'></a>Add operation using NSInvocation
+#### Add operation using NSInvocation
 
 ```objc
 /* Use NSInvocationOperation when you have a method ready */
@@ -409,3 +404,6 @@ NSOperationQueue *q = [[NSOperationQueue alloc] init];
 
 
 ```
+
+### add operation using NSBlockOperation
+
